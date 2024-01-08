@@ -1,0 +1,49 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+}
+
+.navbar {
+    background-color: #ffe4b5; /* Color piel */
+    border: 1px solid #ffe4b5; /* Borde del mismo color */
+    padding: 10px;
+}
+
+.navbar>a {
+    text-decoration: none;
+    color: #000; /* Color de letra que contraste */
+    margin: 0 10px;
+}
+
+.logo {
+    max-height: 30px; /* Ajusta según tu necesidad */
+}
+
+.content {
+    text-align: center;
+    margin: 20px;
+}
+
+form {
+    display: inline-block;
+    text-align: left;
+}
+
+label {
+    font-size: 16px; /* Ajusta según tu necesidad */
+    color: #000; /* Color de letra que contraste */
+}
+
+input, button {
+    font-size: 14px; /* Ajusta según tu necesidad */
+    margin: 5px;
+    background-color: #ffe4b5; 
+}
+
+.result-box {
+    border: 1px solid #ffe4b5; /* Borde del mismo color */
+    padding: 10px;
+    margin: 10px 0;
+    display: inline-block;
+    font-size: 20px;
+}
