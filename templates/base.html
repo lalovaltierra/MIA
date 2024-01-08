@@ -1,0 +1,78 @@
+{% extends 'bootstrap/base.html' %}
+
+{% block head %}
+    {{ super() }}
+    <title>
+        {% block title %}APP | Bienvenido{% endblock%}
+    </title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+{% endblock %}
+
+{% block body %}
+
+    {% block navbar %}
+        {% include 'navbar.html' %}
+    {% endblock %}
+
+    {% block content %}
+        <h1>
+            Clasificador de Cancer de Piel
+        </h1>
+
+        <div class="container mt-3">
+
+            <form id="form-imagen" method="post" enctype="multipart/form-data">
+
+                <div class="form-group">
+                    <label for="imagen">Selecciona una imagen:</label>
+                    <input type="file" class="form-control-file" id="imagen" name="imagen" accept="image/*" onchange="mostrarImagen(this)">
+                </div>
+                
+                <div class="mt-3" id="contenedor-imagen" style="display: none;">
+                    <h4>Imagen Seleccionada</h4>
+                    <img src="#" id="imagen-seleccionada" class="img-fluid" alt="Imagen Seleccionada">
+                </div>
+
+                <button type="submit" class="btn btn-primary" onclick="copiar()">Clasificar</button>
+
+            </form>
+            <div class="mt-3" id="resultado" style="display: none;">
+                <h4>Clasificación</h4>
+                <p id="resultado-texto"></p>
+            </div>
+
+        </div>
+    {% endblock %}
+
+    {% block script%}
+        <script>
+            var imagenURL = ""; 
+
+            function mostrarImagen(input) {
+                var contenedorImagen = document.getElementById('contenedor-imagen');
+                var imagenSeleccionada = document.getElementById('imagen-seleccionada');
+                contenedorImagen.style.display = 'block';
+
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        imagenURL = URL.createObjectURL(input.files[0]);  // Almacenar la URL de la imagen
+                        imagenSeleccionada.src = imagenURL;
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+            function copiar() {
+                // Actualizar la imagen después de que la URL se haya refrescado
+                var imagenSeleccionada = document.getElementById('imagen-seleccionada');
+                imagenSeleccionada.src = imagenURL;
+
+                // Mostrar la sección de resultado
+                var contenedorResultado = document.getElementById('resultado');
+                contenedorResultado.style.display = 'block';
+            }
+        </script>
+
+    {% endblock%}
+
+{% endblock %}
