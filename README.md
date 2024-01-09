@@ -1,5 +1,5 @@
 "Un requiere un ambiente venv con Python 3.8, updated PIP y virtualenv"
-"Si lo requieren: "
+"Si lo requieren:"
 "MIA$ virtualenv venv --python=3.8"
 "MIA$ .\venv\Scripts\Activate" (windows)
 "(venv) MIA$ pip install -r requirements.txt"
