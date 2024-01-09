@@ -5,93 +5,91 @@
     <title>APP</title>
 {% endblock %}
 {% block body %}
-    <div class="navbar navbar-inverse" role="navigation">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button"
-                        class="navbar-toggle"
-                        data-toggle="collapse"
-                        data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a href="{{ url_for('index') }}" class="navbar-brand">
-                    <img src="{{ url_for('static', filename='logo.png')}}" 
-                         style = "max-width: 48px" 
-                         alt="APP logo">
-                </a>
-            </div>
-    
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a href="{{ url_for('index') }}">Inicio</a></li>
-                    <li><a href="https://github.com/lalovaltierra/MIA.git" target="_blank">Proyecto</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    <div class="content">
-        <form id="imageForm" enctype="multipart/form-data" action="{{ url_for('clasificar') }}" method="post">
-            <div class="content" id="cuadroImg">
-                <label for="imagenInput" class="form-label">Imagen:</label>
-                <input class="form-control form-control-lg" id="imagenInput" type="file" name="imagenInput">
-                <img src="#" id="imagen-seleccionada" class="img-fluid" alt="Imagen Seleccionada">
-            </div>
-            <div class="content" id="cuadroRes">
-                <button class="form-control form-control-sm" type="button" id="clasificarBtn">Clasificar</button>
-                <div id="clasificacionResult" class="result-box">
-                    {% if pixel_count %}
-                        Número de píxeles: {{ pixel_count }}
-                    {% endif %}
+
+        <div class="navbar navbar-expand-lg bg-body-tertiary" role="navigation">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button"
+                            class="navbar-toggle"
+                            data-toggle="collapse"
+                            data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a href="{{ url_for('index') }}" class="navbar-brand">
+                        <img src="{{ url_for('static', filename='logo.png')}}" 
+                            style = "max-width: 48px" 
+                            alt="APP logo">
+                    </a>
+                </div>
+        
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a href="{{ url_for('index') }}">Inicio</a></li>
+                        <li><a href="https://github.com/lalovaltierra/MIA.git" target="_blank">Proyecto</a></li>
+                    </ul>
                 </div>
             </div>
-
-        </form>
-    </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Actualiza la imagen seleccionada al cargar un archivo
-            var imagenInput = document.getElementById('imagenInput');
-            var imagenSeleccionada = document.getElementById('imagen-seleccionada');
-
-            imagenInput.addEventListener('change', function () {
-                if (imagenInput.files && imagenInput.files[0]) {
-                    var reader = new FileReader();
-                    reader.onload = function (e) {
-                        imagenSeleccionada.src = e.target.result;
-                    };
-                    reader.readAsDataURL(imagenInput.files[0]);
-                }
-            });
-
-            // Manejar el submit del formulario sin AJAX
-            var form = document.getElementById('imageForm');
-            form.addEventListener('submit', function (event) {
-                event.preventDefault();
-
-                // Realizar alguna validación adicional si es necesario
-
-                // Enviar el formulario de manera asíncrona (sin AJAX)
+        </div>
+    {% block content %}
+        <div class="container align-items-center">
+                <div class="left-div align-items-center">
+                    <form id="imageForm" enctype="multipart/form-data">
+                        <div class="container input-group">
+                            <input type="file" class="form-control" id="imageInput" name="image" accept="image/*" onchange="mostrarImagen(this)">
+                            <button class="btn btn-outline-secondary" type="button" onclick="processImage()">Clasificar</button>
+                        </div>
+                    </form>
+                    <div id="imageContainer" class="text-center" style="display: none;" >
+                        <img id="selectedImage" class="rounded" src="" alt="Imagen seleccionada">
+                    </div>
+                </div>
+                <div class="right-div">
+                    <p>Resultado</p>
+                    <p id="pixelCountResult"></p>
+                </div>
+        </div>
+        
+    {% endblock %}
+    {% block scripts %}
+        {{ super() }}
+        <script>
+            function processImage() {
+                var form = document.getElementById('imageForm');
                 var formData = new FormData(form);
-                fetch(form.action, {
+            
+                fetch('/clasificar', {
                     method: 'POST',
                     body: formData
                 })
                 .then(response => response.json())
                 .then(data => {
-                    // Muestra el resultado en la div correspondiente
-                    var clasificacionResult = document.getElementById('clasificacionResult');
-                    clasificacionResult.innerHTML = 'Número de pixeles: ' + data.pixel_count;
+                    // Mostrar la imagen en el contenedor
+                    document.getElementById('imageContainer').style.display = 'block';
+                    document.getElementById('selectedImage').src = data.image_path;
+            
+                    // Mostrar el resultado del conteo de píxeles
+                    document.getElementById('pixelCountResult').innerText = 'Número de píxeles: ' + data.result;
                 })
-                .catch(error => {
-                    // Manejar errores si es necesario
-                    var clasificacionResult = document.getElementById('clasificacionResult');
-                    clasificacionResult.innerHTML = 'Error al procesar la imagen';
-                });
-            });
-        });
-    </script>
+                .catch(error => console.error('Error:', error));
+            }
 
+            function mostrarImagen(input) {
+
+                var reader = new FileReader();
+                document.getElementById('pixelCountResult').innerText = ' ';    
+
+
+                reader.onload = function (e) {
+                    imagenURL = URL.createObjectURL(input.files[0]);  // Almacenar la URL de la imagen
+                    document.getElementById('imageContainer').style.display = 'block';
+                    document.getElementById('selectedImage').src = imagenURL;
+                }
+                reader.readAsDataURL(input.files[0]);
+
+            }
+        </script>
+    {% endblock %}
 {% endblock %}
