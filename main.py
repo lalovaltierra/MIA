@@ -1,6 +1,6 @@
 from flask import Flask, render_template, make_response, redirect, request
 from flask_bootstrap import Bootstrap
-from PIL import Image
+#from PIL import Image
 from classifier import count_pixels
 import os
 
@@ -30,15 +30,15 @@ def clasificar():
     uploaded_file.save(image_path)
 
     # Abrir la imagen con PIL para obtener dimensiones
-    img = Image.open(image_path)
-    width, height = img.size
+    #img = Image.open(image_path)
+    #width, height = img.size
 
     # Verificar el tamaño de la imagen
     #if width > 480 or height > 480:
     #    img = img.resize((480, 480))
 
     # Guardar la imagen redimensionada
-    img.save(image_path)
+    #img.save(image_path)
 
     # Contar los píxeles y devolver el resultado
     pixel_count = count_pixels(image_path)
