@@ -2,4 +2,6 @@ flask
 python-dotenv
 flask-bootstrap
 pillow
+tensorflow==2.12.0
+scikit-image
 

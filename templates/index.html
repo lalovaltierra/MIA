@@ -70,8 +70,8 @@
                     document.getElementById('imageContainer').style.display = 'block';
                     //document.getElementById('selectedImage').src = data.image_path;
             
-                    // Mostrar el resultado del conteo de píxeles
-                    document.getElementById('pixelCountResult').innerText = 'Número de píxeles: ' + data.result;
+                    // Mostrar el resultado de la clasificación
+                    document.getElementById('pixelCountResult').innerText = 'Clasificación: ' + data.result;
                 })
                 .catch(error => console.error('Error:', error));
             }
